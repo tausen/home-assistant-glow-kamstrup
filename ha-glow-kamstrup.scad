@@ -55,6 +55,12 @@ union() {
             // nub cutout, position based on measurements
             translate([d+bw-tol, 110-100.75-2.5+7, h-83-nh/2])
                 cube([nd+tol, nw, nh]);
+
+            // sensor hole
+            translate([d+bw-tol, w-rw-rhw-15, h-69.5])
+                rotate([0, 90, 0])
+                cylinder(fw+2*tol, 2.5, 2.5);            
+
         }
     }
     
