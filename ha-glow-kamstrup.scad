@@ -5,9 +5,9 @@ bw = 5; // back width
 fw = 15; // front width
 h = 105; // height excl tw
 d = 64; // depth excl fw/bw
-w = 110; // width
+w = 117; // width
 bh = 30; // back height excl tw
-lw = 20; // left hook width
+lw = 27; // left hook width
 rw = 15; // right hook width
 fhh = 65; // front hole height excl tw
 rhw = 28; // front right hole width
@@ -53,7 +53,7 @@ union() {
                 cube([bw+d+fw+2*tol, rhw, rhh+tol]);
             
             // nub cutout, position based on measurements
-            translate([d+bw-tol, 110-100.75-2.5, h-83-nh/2])
+            translate([d+bw-tol, 110-100.75-2.5+7, h-83-nh/2])
                 cube([nd+tol, nw, nh]);
         }
     }
@@ -71,4 +71,5 @@ union() {
         translate([ph, ph+tol, 0]) // compensate for rotation
         rotate([180, 180, 0]) // rotate
         pcbholder();
+
 }
