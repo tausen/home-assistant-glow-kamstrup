@@ -1,36 +1,74 @@
 $fa = 1;
 $fs = 0.4;
-tw = 5; // top width
+tw = 15; // top width
 bw = 5; // back width 
 fw = 15; // front width
 h = 105; // height excl tw
 d = 64; // depth excl fw/bw
 w = 110; // width
+bh = 30; // back height excl tw
+lw = 20; // left hook width
+rw = 15; // right hook width
+fhh = 65; // front hole height excl tw
+rhw = 28; // front right hole width
+rhh = 20; // front right hole height
+nw = 40; // nub cutout width
+nh = 10; // nub cutout height
+nd = 5; // nub cutout depth
+ppd = 15; // pcb holder plane depth
+ph = 8; // pcb holder width and height
+phd = 10; // pcb holder distance from edge
 tol = 0.002;
-difference() {
-    // "main" box
-    cube([bw+d+fw, w, h+tw], center=true);
-    
-    // cutouts
-    union() {
-        // sideways middle
-        translate([-5, 0, -(tw/2+tol)])
-            cube([d, w+tol*2, h], center=true);
 
-        // sideways back
-        translate([-((bw+d+fw)/2-bw/2+tol), 0, -(30+tw)])
-            cube([bw+4*tol, w+tol*2, h+tw], center=true);
-
-        // front top
-        translate([0, 2.5, (h+tw-(65+tw))/2+tol])
-            cube([bw+d+fw+2*tol, w-20-15, 65+tw], center=true);
-
-        // front right
-        translate([0, w/2-15-28/2, (h+tw)/2-(65+5)-20/2+tol])
-            cube([bw+d+fw+2*tol, 28, 20+2*tol], center=true);
-
-        // nub cutout, depth is [cube x size]/2
-        translate([(bw+d+fw)/2-fw, -(10+17.6), -(83+tw-(h+tw)/2)])
-            cube([10, 40, 10], center=true);
+module pcbholder() {
+    difference() {
+        cube([ph, ph+tol, h]);
+        translate([-tol, 2, -tol+ph/2])
+            cube([ph-ph/2+tol, ph-ph/2, h+tol]);
     }
+}
+
+union() {
+    // main
+    difference() {
+        // "main" box
+        cube([bw+d+fw, w, h+tw]);
+        
+        // cutouts
+        union() {
+            // sideways middle
+            translate([bw, -tol, -tol])
+                cube([d, w+tol*2, h+tol]);
+            
+            // sideways back
+            translate([-tol, -tol, -tol])
+                cube([bw+2*tol, w+tol*2, h-bh+tol]);
+            
+            // front top
+            translate([-tol, lw, h+tw-(fhh+tw)])
+                cube([bw+d+fw+2*tol, w-lw-rw, fhh+tw+tol]);
+            
+            // front right
+            translate([-tol, w-rw-rhw,h+tw-(fhh+tw+rhh)])
+                cube([bw+d+fw+2*tol, rhw, rhh+tol]);
+            
+            // nub cutout, position based on measurements
+            translate([d+bw-tol, 110-100.75-2.5, h-83-nh/2])
+                cube([nd+tol, nw, nh]);
+        }
+    }
+    
+    // pcb holder plane
+    translate([0, -ppd, 0])
+        cube([d+fw+bw, ppd+tol, h+tw]);
+    
+    // right pcb holder
+    translate([d+fw+bw-ph-phd, -ppd-ph, tw/2])
+        pcbholder();
+    
+    // left pcb holder
+    translate([phd, -ppd-ph, tw/2]) // position
+        translate([ph, ph+tol, 0]) // compensate for rotation
+        rotate([180, 180, 0]) // rotate
+        pcbholder();
 }
