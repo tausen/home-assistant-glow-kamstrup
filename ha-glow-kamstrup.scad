@@ -16,7 +16,7 @@ nw = 40; // nub cutout width
 nh = 10; // nub cutout height
 nd = 5; // nub cutout depth
 ppd = 15; // pcb holder plane depth
-tth = 69.5; // distance from top excl tw to center of hole
+tth = 70.5; // distance from top excl tw to center of hole
 shd = fw-8; // sensor hole depth
 pcbw = 2.5; // pcb width
 pcbf = pcbw; // pcb front
@@ -58,11 +58,11 @@ difference() {
                     cube([nd+tol, nw, nh]);
 
                 // sensor hole
-                translate([d+bw-tol, w-rw-rhw-15, h-tth])
+                translate([d+bw-tol, w-rw-rhw-15.75, h-tth])
                     rotate([0, 90, 0])
                     cylinder(h=fw+2*tol, d=5);
                 // ..with submersion ring
-                translate([d+bw+fw-shd, w-rw-rhw-15.5, h-tth])
+                translate([d+bw+fw-shd, w-rw-rhw-15.75, h-tth])
                     rotate([0, 90, 0])
                     cylinder(h=shd+tol, d=6);
             }
